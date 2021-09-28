@@ -49,7 +49,12 @@ const AdminNavbar = () => {
                                 <i class="fab fa-product-hunt"></i>Products
                             </Link>
                         </li>
-
+                        <li className="nav-item">
+                            <Link className="nav-link text-light" to="/all-orders" exact>
+                                <i class="fab fa-product-hunt"></i>Orders
+                            </Link>
+                        </li>
+                        
 
                         {st != true &&
                             <li className="nav-item">
@@ -63,13 +68,6 @@ const AdminNavbar = () => {
                             <li className="nav-item" >
                                 <Link className="nav-link text-light" to="/logout-page" >
                                     <i class="fas fa-sign-out-alt"></i>Sign out
-                                </Link>
-                            </li>
-                        }
-                        {st == true &&
-                            <li className="nav-item " >
-                                <Link className="nav-link text-light" to="/view-profile-page" >
-                                    <i class="fas fa-id-card"></i><img src="{icon}" style={{ width: "35px" }}></img>
                                 </Link>
                             </li>
                         }

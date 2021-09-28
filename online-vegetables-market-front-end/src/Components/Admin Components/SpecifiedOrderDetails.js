@@ -1,12 +1,13 @@
+
 import React, { useState, useEffect } from 'react';
 import AllServices from '../../Services/AllServices';
 import Navbar from './../Animation Component/Navbar';
-import AdminNavbar from './../Admin Components/AdminNavbar';
+import AdminNavbar from './AdminNavbar';
 
-function OrderDetails(props) {
+function SpecifiedOrderDetails(props) {
     let counter = 0;
     const [bookingDetails, setBookingDetails] = useState([])
-    const [payment, setPayment] = useState({});
+    // const [payment, setPayment] = useState({});
     // const [userId, setUserId] = useState();
 
     const back = () => {
@@ -14,23 +15,23 @@ function OrderDetails(props) {
     }
 
   
-    const getPaymentDetailsByBookingId = () => {
-        AllServices.getPaymentDetailsByBookingId(props.match.params.id).then((res) => {
-            res.data !== null && setPayment(res.data);
-            console.log(payment)
-        })
-    }
+    // const getPaymentDetailsByBookingId = () => {
+    //     AllServices.getPaymentDetailsByBookingId(props.match.params.id).then((res) => {
+    //         res.data !== null && setPayment(res.data);
+    //         console.log(payment)
+    //     })
+    // }
 
-    const loadRentBookingHistory = () => {
-        AllServices.viewOrderDetails(props.match.params.id).then((res) => {
+    const loadOrderHistory = () => {
+        AllServices.viewSpecifiedOrderDetails(props.match.params.id).then((res) => {
             // console.log(JSON.stringify(res.data.result))
             setBookingDetails(res.data);
         })
     }
 
     useEffect(() => {
-        loadRentBookingHistory();
-        getPaymentDetailsByBookingId();
+        loadOrderHistory();
+        // getPaymentDetailsByBookingId();
     }, [])
 
     return (
@@ -78,5 +79,5 @@ function OrderDetails(props) {
         </div>
     )
 }
-export default OrderDetails;
+export default SpecifiedOrderDetails;
 

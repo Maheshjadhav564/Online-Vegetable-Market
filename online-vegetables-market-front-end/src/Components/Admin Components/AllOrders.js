@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import AllServices from '../../Services/AllServices';
-import Navbar from './../Animation Component/Navbar';
 
-function OrderHistory(props) {
+import ProductServices from '../../Services/Admin Services/ProductServices';
+import Navbar from '../Animation Component/Navbar';
+
+function AllOrders(props) {
     let counter = 0;
     const [orders, setOrders] = useState([])
-    const [userId, setUserId] = useState();
 
     const back = () => {
         window.history.back();
     }
     const cancelOrder = (id) => {
 
-        AllServices.cancelOrder(id).then((res) => {
+        ProductServices.cancelOrder(id).then((res) => {
             if (res.data == null) alert("Sorry you can't cancel order");
             else {
                 res.data != null && alert("Order Canceld");
@@ -24,20 +24,43 @@ function OrderHistory(props) {
     }
 
     const viewOrderDetails = (id) => {
-        props.history.push(`/order-details/${id}`)
+        props.history.push(`/specific-order-details/${id}`)
+    }
+
+    const deliveredOrder= (id) => {
+            ProductServices.deliveredOrder(id).then((res) => {
+                if (res.data == null) alert("Sorry you can't accept order");
+                else {
+                    res.data != null && alert("Order Accepted");
+                    res.data != null && window.location.reload();
+                }
+            }).catch(err => {
+                alert("Sorry you can't accept order");
+            });
+        }
+
+    const acceptOrder = (id) => {
+        ProductServices.acceptOrder(id).then((res) => {
+            if (res.data == null) alert("Sorry you can't accept order");
+            else {
+                res.data != null && alert("Order Accepted");
+                res.data != null && window.location.reload();
+            }
+        }).catch(err => {
+            alert("Sorry you can't accept order");
+        });
     }
 
 
-    const loadRentOrderHistory = () => {
-        AllServices.loadRentOrderHistory(JSON.parse(window.localStorage.getItem("user_id"))).then((res) => {
+    const loadAllOrders = () => {
+        ProductServices.loadAllOrders().then((res) => {
             console.log(JSON.stringify(res.data))
             setOrders(res.data);
         })
     }
 
     useEffect(() => {
-        setUserId(JSON.parse(window.localStorage.getItem("user_id")))
-        loadRentOrderHistory();
+        loadAllOrders();
     }, [])
 
     return (
@@ -77,10 +100,10 @@ function OrderHistory(props) {
                                                             <td>{order.orderDate}</td>
                                                             <td>{order.totalPrice}</td>
                                                             <td>{order.orderDeliveryStatus}</td>
-
                                                             <td>
-                                                               
-                                                                <button className="btn btn-outline-danger" style={{ borderRadius: "10px" }} onClick={() => cancelOrder(order.id)} >Cancel<i class="fas fa-trash"></i></button>
+                                                                {order.orderDeliveryStatus === "PENDING" && <button className="btn btn-outline-info mr-2" style={{ borderRadius: "10px" }} onClick={() => acceptOrder(order.id)} >Accept</button>}
+                                                                {order.orderDeliveryStatus === "ACCEPTED" && <button className="btn btn-outline-success mr-1" style={{ borderRadius: "10px" }} onClick={() => deliveredOrder(order.id)} >Delivered</button>}
+                                                                {order.orderDeliveryStatus === "PENDING"  &&<button className="btn btn-outline-danger mr-1" style={{ borderRadius: "10px" }} onClick={() => cancelOrder(order.id)} >Cancel<i class="fas fa-trash"></i></button>}
                                                                 <button className="btn btn-outline-info ml-2" style={{ borderRadius: "10px" }} onClick={() => viewOrderDetails(order.id)} >View <i class="fas fa-info-circle"></i></button>
                                                             </td>
                                                         </tr>
@@ -100,4 +123,4 @@ function OrderHistory(props) {
     )
 }
 
-export default OrderHistory;
+export default AllOrders;
